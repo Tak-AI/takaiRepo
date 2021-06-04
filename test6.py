@@ -32,3 +32,4 @@ def Run(ct,*args):
     x2[2] += c1*i
     x_traj.append(x2)
   ct.robot.FollowXTraj(x_traj, t_traj)
+  rospy.sleep(2)
