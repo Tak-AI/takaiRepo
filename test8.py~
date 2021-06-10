@@ -5,6 +5,8 @@ import time
 #from test5 import position2
 
 def Run(ct,*args):
+  ct.robot.MoveToQ([-0.02225494707637879, 0.027604753814144237, 0.02256845844164128, -2.2001560115435073, -0.00047772651727832574, 0.6569580325147487, 0.0010119170182285682], blocking=True)
+  rospy.sleep(3)
   ct.robot.OpenGripper()
   position2 = ct.GetAttr('obj1','position')
   print(position2)
