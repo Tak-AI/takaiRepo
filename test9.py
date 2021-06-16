@@ -13,7 +13,7 @@ def Run(ct,*args):
     theta = math.pi
   else: 
     theta = math.atan2(b, a)
-  ct.robot.MoveToQ([theta, 0.027604753814144237, 0.02256845844164128, -2.2001560115435073, -0.00047772651727832574, 0.6569580325147487, 0.0010119170182285682], 2.0, blocking=True)
+  ct.robot.MoveToQ([theta, 0.0276047, 0.0225684, -2.2001560, -0.0004777, 0.6569580, 0.0010118], 2.0, blocking=True)
   rospy.sleep(3)
   x = list(ct.robot.FK())
   x1 = copy.deepcopy(x)
@@ -32,8 +32,6 @@ def Run(ct,*args):
     x2[1] += b1*i
     x2[2] += c1*i
     x_traj.append(x2)
-  #print t_traj
-  #print x_traj
   rospy.sleep(3)
   ct.robot.FollowXTraj(x_traj, t_traj, blocking=True)
   rospy.sleep(2)
