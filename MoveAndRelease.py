@@ -15,7 +15,7 @@ def Run(ct,*args):
   if str == "side":
     ct.robot.MoveToQ([theta, 0.0276047, 0.0225684, -2.2001560, -0.0004777, 0.6569580, 0.0010118], 2.0, blocking=True)
   elif str == "up":
-    ct.robot.MoveToQ([theta, 0.0276047, 0.0225684, -2.2001560, -0.0004777, -0.8569580, 0.0010118], 2.0, blocking=True)
+    ct.robot.MoveToQ([theta, 0.2276047, 0.02256845844164128, -1.1001560115435073, -0.0004777, -1.8569580, 0.00101191], 2.0, blocking=True)
   else:
     ct.robot.MoveToQ([theta, 0.0276047, 0.0225684, -2.2001560, -0.0004777, 0.6569580, 0.0010118], 2.0, blocking=True)
   rospy.sleep(3)
@@ -36,11 +36,14 @@ def Run(ct,*args):
     x2[1] += b1*i
     x2[2] += c1*i
     x_traj.append(x2)
-  rospy.sleep(3)
+  rospy.sleep(2)
   ct.robot.FollowXTraj(x_traj, t_traj, blocking=True)
   rospy.sleep(2)
   ct.robot.OpenGripper()
-  x2[2] += 0.1
-  ct.robot.MoveToX(x2, 2.0, blocking = True)
-  rospy.sleep(2)
-  ct.robot.MoveToQ([theta, 0.0276047, 0.0225684, -2.2001560, -0.0004777, 0.6569580, 0.0010118], 2.0, blocking=True)
+  rospy.sleep(3)
+  if str == "side":
+    ct.robot.MoveToQ([theta, 0.0276047, 0.0225684, -2.2001560, -0.0004777, 0.6569580, 0.0010118], 2.0, blocking=True)
+  elif str == "up":
+    ct.robot.MoveToQ([theta, 0.2276047, 0.02256845844164128, -1.1001560115435073, -0.0004777, -1.8569580, 0.00101191], 2.0, blocking=True)
+  else:
+    ct.robot.MoveToQ([theta, 0.0276047, 0.0225684, -2.2001560, -0.0004777, 0.6569580, 0.0010118], 2.0, blocking=True)
