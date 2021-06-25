@@ -34,8 +34,6 @@ def Run(ct,*args):
     x2[1] += b1*i
     x2[2] += c1*i
     x_traj.append(x2)
-  print t_traj
-  print x_traj
   rospy.sleep(3)
   ct.robot.FollowXTraj(x_traj, t_traj)
   print('owari!')
