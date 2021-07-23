@@ -5,8 +5,8 @@ import time
 #from test5 import position
 
 def Run(ct,*args):
-  ct.robot.MoveToQ([-0.02225494707637879, 0.027604753814144237, 0.02256845844164128, -2.2001560115435073, -0.00047772651727832574, 0.6569580325147487, 0.0010119170182285682], blocking=True)
-  rospy.sleep(3)
+  #ct.robot.MoveToQ([-0.02225494707637879, 0.027604753814144237, 0.02256845844164128, -2.2001560115435073, -0.00047772651727832574, 0.6569580325147487, 0.0010119170182285682], blocking=True)
+  #rospy.sleep(3)
   position = ct.GetAttr('obj1','position')
   print(position)
   if position[0] == 0 and position[1] > 0:
@@ -15,8 +15,8 @@ def Run(ct,*args):
     theta = -math.pi/2
   else:
     theta = math.atan2(position[1], position[0])
-  ct.robot.MoveToQ([theta, 0.027604753814144237, 0.02256845844164128, -2.2001560115435073, -0.00047772651727832574, 0.6569580325147487, 0.0010119170182285682], blocking=True)
-  rospy.sleep(3)
+  ct.robot.MoveToQ([theta, 0.027604753814144237, 0.02256845844164128, -2.2001560115435073, -0.00047772651727832574, 0.6569580325147487, 0.0010119170182285682], blocking=False)
+  #rospy.sleep(3)
   x = list(ct.robot.FK())
   x1 = copy.deepcopy(x)
   x_traj = []
@@ -34,4 +34,4 @@ def Run(ct,*args):
     x2[2] += c1*i
     x_traj.append(x2)
   ct.robot.FollowXTraj(x_traj, t_traj)
-  rospy.sleep(2)
+  #rospy.sleep(2)

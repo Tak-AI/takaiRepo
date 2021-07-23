@@ -6,7 +6,7 @@ def Help():
   return '''Template of script.
   Usage: template'''
 def Run(ct,*args):
-  ct.robot.MoveToQ([-0.02225494707637879, 0.027604753814144237, 0.02256845844164128, -2.2001560115435073, -0.00047772651727832574, 0.6569580325147487, 0.0010119170182285682], 2.0, blocking=True)
+  #ct.robot.MoveToQ([-0.02225494707637879, 0.027604753814144237, 0.02256845844164128, -2.2001560115435073, -0.00047772651727832574, 0.6569580325147487, 0.0010119170182285682], 2.0, blocking=True)
   a = input()
   b = input()
   c = input()
@@ -17,7 +17,6 @@ def Run(ct,*args):
   else: 
     theta = math.atan2(b, a)
   ct.robot.MoveToQ([theta, 0.027604753814144237, 0.02256845844164128, -2.2001560115435073, -0.00047772651727832574, 0.6569580325147487, 0.0010119170182285682], 2.0, blocking=True)
-  print(theta)
   #rospy.sleep(3)
   o = math.sqrt((-16)/(-8))
   print(float(o))
@@ -39,4 +38,3 @@ def Run(ct,*args):
     x_traj.append(x2)
   #rospy.sleep(3)
   ct.robot.FollowXTraj(x_traj, t_traj)
-  print('owari!')
