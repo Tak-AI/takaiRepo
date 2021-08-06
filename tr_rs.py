@@ -3,37 +3,56 @@ from core_tool import *
 import rospy
 import math
 import numpy as np
+#import keyboard
+import cv2
 def Help():
   return '''Template of script.
   Usage: template'''
 def Run(ct,*args):
+  key = 'a'
+  thx = 0
+  thy = math.pi/2
+  thz = -math.pi/2
+  xr=np.array([[1,0,0,0],
+               [0,math.cos(thx),math.sin(thx),0],
+               [0,-math.sin(thx),math.cos(thx),0],
+               [0,0,0,1]])
+  yr=np.array([[math.cos(thy),0,-math.sin(thy),0],
+               [0,1,0,0],
+               [math.sin(thy),math.cos(thy),0,0],
+               [0,0,0,1]])
+  zr=np.array([[math.cos(thz),math.sin(thz),0,0],
+               [-math.sin(thz),math.cos(thz),0,0],
+               [0,0,1,0],
+               [0,0,0,1]])
+  R = np.dot(xr,np.dot(yr,zr))
+  a = np.array([[1,0,0,1.0],
+                [0,1,0,0],
+                [0,0,1,0.5],
+                [0,0,0,1]])
   while not rospy.is_shutdown():
-    x_90 = np.array([[1,0,0,0],[0,0,1,0],[0,-1,0,0],[0,0,0,1]]) 
-    z__90 = np.array([[0,-1,0,0],[1,0,0,0],[0,0,1,0],[0,0,0,1]]) 
-    R = np.dot(z__90,x_90)
-    a = np.array([[1,0,0,1],[0,1,0,0],[0,0,1,0.5],[0,0,0,1]])
     position = ct.GetAttr('obj1','position')
-    camera_vector = np.array([position[0],position[1],position[2],1])
-    arm_vector = np.dot(a,np.dot(R,camera_vector))
-    print(arm_vector)
-    if arm_vector[0] <= 0:
+    key = ct.GetAttr('obj3','key')
+    if key == 'q':
       break
-    x = list(ct.robot.FK())
-    x1 = copy.deepcopy(x)
-    ct.robot.MoveToXI([arm_vector[0],arm_vector[1],arm_vector[2],x1[3],x1[4],x1[5],x1[6]], blocking = True)
-    x_traj = []
-    t_traj = []
-    x_traj.append(x1)
-    t_traj.append(0.0)
-    a1 = (float(arm_vector[0]) - x1[0])/50
-    b1 = (float(arm_vector[1]) - x1[1])/50
-    c1 = (float(arm_vector[2]) - x1[2])/50
-    for i in range(1, 50):
-      t_traj.append(0.1*i)
-      x2 = copy.deepcopy(x)
-      x2[0] += a1*i
-      x2[1] += b1*i
-      x2[2] += c1*i
-      x_traj.append(x2)
-    #rospy.sleep(3)
-    ct.robot.FollowXTraj(x_traj, t_traj)
+    if key == 'g':
+      ct.robot.MoveGripper(0.07)
+    if key == 'o':
+      ct.robot.OpenGripper()
+    if position[3] >42  and position[3] <806  and position[4]>24 and position[4]<456:
+      camera_vector = np.array([position[0]*0.001,
+                                position[1]*0.001,
+                                position[2]*0.001,
+                                1])
+      arm_vector = np.dot(a,np.dot(R,camera_vector))
+      print(position)
+      print(arm_vector)
+      #if arm_vector[0] <= 0:
+       # break
+      x = list(ct.robot.FK())
+      x1 = copy.deepcopy(x)
+      ct.robot.MoveToXI([arm_vector[0],arm_vector[1],arm_vector[2],x1[3],x1[4],x1[5],x1[6]],0.2, blocking = True)
+    k = cv2.waitKey(1) & 0xFF
+    if k == ord('q'):
+        break
+
