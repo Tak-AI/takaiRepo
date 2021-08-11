@@ -3,7 +3,6 @@ from core_tool import *
 import rospy
 import math
 import numpy as np
-#import keyboard
 import cv2
 def Help():
   return '''Template of script.
@@ -30,7 +29,14 @@ def Run(ct,*args):
                 [0,1,0,0],
                 [0,0,1,0.5],
                 [0,0,0,1]])
+  arm_vector = np.array([0.5,
+                         0.0,
+                         0.5,
+                           1])
+  x = list(ct.robot.FK())
+  x1 = copy.deepcopy(x)
   while not rospy.is_shutdown():
+    tmp = copy.deepcopy(position)
     position = ct.GetAttr('obj1','position')
     key = ct.GetAttr('obj3','key')
     if key == 'q':
@@ -44,15 +50,12 @@ def Run(ct,*args):
                                 position[1]*0.001,
                                 position[2]*0.001,
                                 1])
+      tmp = copy.deepcopy(arm_vector)
       arm_vector = np.dot(a,np.dot(R,camera_vector))
       print(position)
       print(arm_vector)
       #if arm_vector[0] <= 0:
        # break
-      x = list(ct.robot.FK())
-      x1 = copy.deepcopy(x)
-      ct.robot.MoveToXI([arm_vector[0],arm_vector[1],arm_vector[2],x1[3],x1[4],x1[5],x1[6]],0.2, blocking = True)
-    k = cv2.waitKey(1) & 0xFF
-    if k == ord('q'):
-        break
-
+      if arm_vector != tmp:
+        t = np.linalg.norm(arm_vector-tmp) / 0.5
+        ct.robot.MoveToXI([arm_vector[0],arm_vector[1],arm_vector[2],x1[3],x1[4],x1[5],x1[6]], t, blocking = True)

@@ -6,7 +6,7 @@ def Help():
   return '''Template of script.
   Usage: template'''
 def Run(ct,*args):
-  position = [0,0,0]
+  position = [0.5,0,0.5]
   while not rospy.is_shutdown():
     tmp = copy.deepcopy(position)
     position = ct.GetAttr('obj1','position')
@@ -22,7 +22,9 @@ def Run(ct,*args):
     x = list(ct.robot.FK())
     x1 = copy.deepcopy(x)
     if position != tmp:
-      ct.robot.MoveToXI([position[0],position[1],position[2],x1[3],x1[4],x1[5],x1[6]], 0.2, blocking = True)
+      t = math.sqrt((position[0]-tmp[0])**2 + (position[1]-tmp[1])**2 + (position[1]-tmp[1])**2) / 0.5
+      ct.robot.MoveToXI([position[0],position[1],position[2],x1[3],x1[4],x1[5],x1[6]], t, blocking = True)
+      print(t)
 
 
 
